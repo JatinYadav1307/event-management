@@ -7,11 +7,18 @@ module.exports = function (app) {
     })
     )
     
-    app.get('/auth/google/callback', passport.authenticate('google'))
+    app.get('/auth/google/callback', passport.authenticate('google', {
+        successRedirect: '/api/current_user',
+        failureRedirect: '/api/fail'
+    }))
 
     app.get('/api/logout', (req, res) => {
         req.logout();
         res.send(req.user);
+    })
+
+    app.get('/api/fail', (req, res) => {
+        res.send('Authentication Failed!');
     })
 
     app.get('/api/current_user', (req, res) => {
